@@ -1,0 +1,197 @@
+\documentclass[a4paper]{scrreprt}
+
+% Uncomment to optimize for double-sided printing.
+% \KOMAoptions{twoside}
+
+% Set binding correction manually, if known.
+% \KOMAoptions{BCOR=2cm}
+
+% Localization options
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% Quotations
+\usepackage{dirtytalk}
+
+% Floats
+\usepackage{float}
+
+% Enhanced verbatim sections. We're mainly interested in
+% \verbatiminput though.
+\usepackage{verbatim}
+
+% Automatically remove leading whitespace in lstlisting
+\usepackage{lstautogobble}
+
+% PDF-compatible landscape mode.
+% Makes PDF viewers show the page rotated by 90°.
+\usepackage{pdflscape}
+
+% Advanced tables
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+
+% Fancy tablerules
+\usepackage{booktabs}
+
+% Graphics
+\usepackage{graphicx}
+
+% Current time
+\usepackage[useregional=numeric]{datetime2}
+
+% Float barriers.
+% Automatically add a FloatBarrier to each \section
+\usepackage[section]{placeins}
+
+% Custom header and footer
+\usepackage{fancyhdr}
+
+\usepackage{geometry}
+\usepackage{layout}
+
+% Math tools
+\usepackage{mathtools}
+% Math symbols
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{amsthm}
+% General symbols
+\usepackage{stmaryrd}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+
+% Indistinguishable operator (three stacked tildes)
+\newcommand*{\diffeo}{% 
+  \mathrel{\vcenter{\offinterlineskip
+  \hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}}}}
+
+% Bullet point
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+
+\floatstyle{ruled}
+\newfloat{algo}{htbp}{algo}
+\floatname{algo}{Algorithm}
+% For use in algorithms
+\newcommand{\str}[1]{\textsc{#1}}
+\newcommand{\var}[1]{\textit{#1}}
+\newcommand{\op}[1]{\textsl{#1}}
+
+\pagestyle{plain}
+% \fancyhf{}
+% \lhead{}
+% \lfoot{}
+% \rfoot{}
+% 
+% Source code & highlighting
+\usepackage{listings}
+
+% SI units
+\usepackage[binary-units=true]{siunitx}
+\DeclareSIUnit\cycles{cycles}
+
+% Convenience commands
+\newcommand{\mailsubject}{11043 - Internet of Things - Series 2}
+\newcommand{\maillink}[1]{\href{mailto:#1?subject=\mailsubject}
+                               {#1}}
+
+% Should use this command wherever the print date is mentioned.
+\newcommand{\printdate}{\today}
+
+\subject{11043 - Internet of Things}
+\title{Series 2}
+
+\author{Michael Senn \maillink{michael.senn@students.unibe.ch} - 16-126-880}
+
+\date{\printdate}
+
+% Needs to be the last command in the preamble, for one reason or
+% another. 
+\usepackage{hyperref}
+
+\begin{document}
+\maketitle
+
+
+\setcounter{chapter}{1}
+
+\chapter{Series 2}
+
+\section{Multi-hop communication}
+
+Multi-hop communication is a network communication model where, instead of data
+being exchanged directly between two nodes $A$ and $B$, it is exchanged via a
+set of intermediary nodes, such that any individual hop covers a shorter
+distance than direct communication would.
+
+As energy usage is cubic - or worse - with distance covered, multi-hop
+communication becomes more advantageous the longer the distance to cover. As
+each additional hop also incurs a certain energy overhead, too many hops is not
+beneficial however.
+
+\section{Saving energy by sleeping}
+
+Recall the two equations from the lecture, for the energy overhead incurred and
+the energy saved by sleeping:
+
+\begin{align*}
+		E_{saved} & = (t_{event} - t_1) \cdot P_{active} - (t_{down} \cdot (P_{active} + P_{sleep}) / 2 + (t_{event} - t_1 - t_{down}) \cdot P_{sleep}) \\
+		E_{overhead} & = t_{up} \cdot(P_{active} + P_{sleep}) / 2
+\end{align*}
+
+Then the minimum sleep duration $t_{sleep} := t_{event} - t_{1}$ for which a
+sleep saves more energy than it costs can be found by $E_{saved} =
+E_{overhead}$ for $t_{sleep}$.
+
+Assume that the voltage in both states is contant at $x$ Volts, in which case
+the result will be independent of the voltage.
+
+\subsection{First example}
+
+Let $t_{down} = \SI{3}{\ms}$, $t_{up} = \SI{3}{\ms}$, $I_{active} = \SI{15}{\mA}$, $I_{sleep} = \SI{25}{\uA}$
+
+Then:
+\begin{align*}
+		E_{overhead} & = \SI{2.254e-5}{\J} = E_{saved} \\
+		\Rightarrow t_{sleep} & \approx \SI{3.0017}{\ms}
+\end{align*}
+
+That is, any sleep duration longer than \SI{3.0017}{\ms} will lead to a net
+save of energy.
+
+\subsection{Second example}
+
+Let $t_{down} = \SI{4.5}{\ms}$, $t_{up} = \SI{4.5}{\ms}$, $I_{active} = \SI{10}{\mA}$, $I_{sleep} = \SI{15}{\uA}$
+
+Then:
+\begin{align*}
+		E_{overhead} & = \SI{2.25e-5}{\J} = E_{saved} \\
+		\Rightarrow t_{sleep} & \approx \SI{4.747}{\ms}
+\end{align*}
+
+That is, any sleep duration longer than \SI{4.747}{\ms} will lead to a net
+save of energy.
+
+\section{Power usage \& battery capacity}
+
+\subsection{Average power consumption}
+
+We first consider the time spent transmitting data. With a
+\SI{19.2}{\kilo\bit\per\second} bandwith, transmitting a \SI{96}{\byte} packet
+takes \SI{40}{\ms}.
+
+As such, the node will spend \SI{10}{\ms} measuring and processing data with a
+power usage of \SI{20}{\mA}, \SI{40}{\ms} sending data with a power usage of
+\SI{30}{\mA} and \SI{950}{\ms} idle with a power usage of \SI{250}{\uA}. As
+such its average power consumption will be $x \cdot \SI{1.638}{\mW}$, at a
+supply voltage of $x \si{\V}$.
+
+\subsection{Battery power}
+
+Three \SI{5}{\V} batteries of \SI{1000}{\milli\ampere\hour} will, in our
+simplified model, provide \SI{3000}{\milli\ampere\hour} at \SI{5}{\V}. At a
+consumption of \SI{1.638}{\milli\ampere\hour} at \SI{5}{\V}, this will last for
+approximately \SI{76.31}{\day}.
+
+\end{document}
