@@ -141,11 +141,13 @@ the energy saved by sleeping:
 \end{align*}
 
 Then the minimum sleep duration $t_{sleep} := t_{event} - t_{1}$ for which a
-sleep saves more energy than it costs can be found by $E_{saved} =
-E_{overhead}$ for $t_{sleep}$.
+sleep saves at least as much energy as it costs can be found by solving
+$E_{saved} = E_{overhead}$ for $t_{sleep}$. Any sleep longer than $t_{sleep}$
+will then save more energy than the overhead.
 
-Assume that the voltage in both states is contant at $x$ Volts, in which case
-the result will be independent of the voltage.
+Assume that the voltage in both states is constant, in which case the result
+will be independent of the voltage. To simplify calculations we assume the
+voltage to be \SI{1}{\V}.
 
 \subsection{First example}
 
@@ -153,11 +155,11 @@ Let $t_{down} = \SI{3}{\ms}$, $t_{up} = \SI{3}{\ms}$, $I_{active} = \SI{15}{\mA}
 
 Then:
 \begin{align*}
-		E_{overhead} & = \SI{2.254e-5}{\J} = E_{saved} \\
-		\Rightarrow t_{sleep} & \approx \SI{3.0017}{\ms}
+		E_{overhead} & = \SI{2.25375e-5}{\J} = E_{saved} \\
+		\Rightarrow t_{sleep} & \approx \SI{3.005}{\ms}
 \end{align*}
 
-That is, any sleep duration longer than \SI{3.0017}{\ms} will lead to a net
+That is, any sleep duration longer than \SI{3.005}{\ms} will lead to a net
 save of energy.
 
 \subsection{Second example}
@@ -166,26 +168,34 @@ Let $t_{down} = \SI{4.5}{\ms}$, $t_{up} = \SI{4.5}{\ms}$, $I_{active} = \SI{10}{
 
 Then:
 \begin{align*}
-		E_{overhead} & = \SI{2.25e-5}{\J} = E_{saved} \\
-		\Rightarrow t_{sleep} & \approx \SI{4.747}{\ms}
+		E_{overhead} & = \SI{2.25338e-5}{\J} = E_{saved} \\
+		\Rightarrow t_{sleep} & \approx \SI{4.5068}{\ms}
 \end{align*}
 
-That is, any sleep duration longer than \SI{4.747}{\ms} will lead to a net
+That is, any sleep duration longer than \SI{4.5068}{\ms} will lead to a net
 save of energy.
 
 \section{Power usage \& battery capacity}
 
+Assume that, when transmitting data, the microcontroller must be in the active
+state.
+
 \subsection{Average power consumption}
 
-We first consider the time spent transmitting data. With a
+First consider the time spent transmitting data. With a
 \SI{19.2}{\kilo\bit\per\second} bandwith, transmitting a \SI{96}{\byte} packet
 takes \SI{40}{\ms}.
 
-As such, the node will spend \SI{10}{\ms} measuring and processing data with a
-power usage of \SI{20}{\mA}, \SI{40}{\ms} sending data with a power usage of
-\SI{30}{\mA} and \SI{950}{\ms} idle with a power usage of \SI{250}{\uA}. As
-such its average power consumption will be $x \cdot \SI{1.638}{\mW}$, at a
-supply voltage of $x \si{\V}$.
+As such, per \SI{1}{\s} the node will spend:
+
+\begin{itemize}
+		\item \SI{10}{\ms} measuring and processing data, with a current of \SI{20}{\mA}
+		\item \SI{40}{\ms} transmitting data, with a current of \SI{30}{\mA}
+		\item \SI{950}{\ms} idle, with a current of \SI{250}{\uA}
+\end{itemize}
+
+As such its average power consumption will be $\SI{5}{\V} \cdot \SI{1.638}{\mA}
+= \SI{8.19}{\mW}$.
 
 \subsection{Battery power}
 
