@@ -1,0 +1,202 @@
+\documentclass[a4paper]{scrreprt}
+
+% Uncomment to optimize for double-sided printing.
+% \KOMAoptions{twoside}
+
+% Set binding correction manually, if known.
+% \KOMAoptions{BCOR=2cm}
+
+% Localization options
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% Quotations
+\usepackage{dirtytalk}
+
+% Floats
+\usepackage{float}
+
+% Enhanced verbatim sections. We're mainly interested in
+% \verbatiminput though.
+\usepackage{verbatim}
+
+% Automatically remove leading whitespace in lstlisting
+\usepackage{lstautogobble}
+
+% PDF-compatible landscape mode.
+% Makes PDF viewers show the page rotated by 90°.
+\usepackage{pdflscape}
+
+% Advanced tables
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+
+% Fancy tablerules
+\usepackage{booktabs}
+
+% Graphics
+\usepackage{graphicx}
+
+% Current time
+\usepackage[useregional=numeric]{datetime2}
+
+% Float barriers.
+% Automatically add a FloatBarrier to each \section
+\usepackage[section]{placeins}
+
+% Custom header and footer
+\usepackage{fancyhdr}
+
+\usepackage{geometry}
+\usepackage{layout}
+
+% Math tools
+\usepackage{mathtools}
+% Math symbols
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{amsthm}
+% General symbols
+\usepackage{stmaryrd}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+
+% Indistinguishable operator (three stacked tildes)
+\newcommand*{\diffeo}{% 
+  \mathrel{\vcenter{\offinterlineskip
+  \hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}}}}
+
+% Bullet point
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+
+\floatstyle{ruled}
+\newfloat{algo}{htbp}{algo}
+\floatname{algo}{Algorithm}
+% For use in algorithms
+\newcommand{\str}[1]{\textsc{#1}}
+\newcommand{\var}[1]{\textit{#1}}
+\newcommand{\op}[1]{\textsl{#1}}
+
+\pagestyle{plain}
+% \fancyhf{}
+% \lhead{}
+% \lfoot{}
+% \rfoot{}
+% 
+% Source code & highlighting
+\usepackage{listings}
+
+% SI units
+\usepackage[binary-units=true]{siunitx}
+\DeclareSIUnit\cycles{cycles}
+
+% Convenience commands
+\newcommand{\mailsubject}{11043 - Internet of Things - Series 3}
+\newcommand{\maillink}[1]{\href{mailto:#1?subject=\mailsubject}
+                               {#1}}
+
+% Should use this command wherever the print date is mentioned.
+\newcommand{\printdate}{\today}
+
+\subject{11043 - Internet of Things}
+\title{Series 3}
+
+\author{Michael Senn \maillink{michael.senn@students.unibe.ch} - 16-126-880}
+
+\date{\printdate}
+
+% Needs to be the last command in the preamble, for one reason or
+% another. 
+\usepackage{hyperref}
+
+\begin{document}
+\maketitle
+
+
+\setcounter{chapter}{2}
+
+\chapter{Series 3}
+
+\section{Multi-threaded versus event-driven concurrency}
+
+\begin{itemize}
+		\item With event-driven concurrency, an invoked event-handler is
+				executed until completion. Only when it finished is another
+				invoked. With multi-threaded concurrency however, threads will
+				run until the next blocking statement, at which point another
+				will take over.
+		\item With event-driven concurrency, a single stack is sufficient as
+				each event is run until execution, so no state must be
+				persisted. With multi-threaded concurrency each thread needs
+				its own stack, in order to persist state as its interruption
+				will be interrupted multiple times.
+\end{itemize}
+
+\section{LEDF scheduling}
+
+Assume that the scheduling algorithm runs whenever a new task is scheduled, or
+a scheduled task finished. Assume that the deadlines are relative to the
+thread's arrival times.
+
+Given the processor speeds in table \ref{tbl:processor_speeds}, tasks in table
+\ref{tbl:tasks} and algorithm from slide 39 of the lecture, the execution plan
+in table \ref{tbl:execution_plan} results. Entries of the task queue are tuples
+$(t_i, l_i)$, with $l_i$ the \textbf{remaining} instruction length of thread
+$t_i$ at the given time. The task queue is ordered by ascending deadline.
+
+\begin{table}
+		\centering
+		\begin{tabular}{lll}
+				\toprule
+				Time & Choice of $S$ & Task queue \\
+				\midrule
+				\SI{0}{\s} & 300 & $((t_1, 900))$ \\
+				\SI{2}{\s} & 200 & $((t_1, 300), (t_2, 1800))$ \\
+				\SI{2.5}{\s} & 200 & $((t_1, 200), (t_2, 1800), (t_3, 450))$ \\
+				\SI{3.5}{\s} & 300 & $((t_2, 1800), (t_3, 450))$ \\
+				\SI{5}{\s} & 300 & $((t_2, 1350), (t_3, 450), (t_4, 1000))$ \\
+				\SI{6}{\s} & 300 & $((t_2, 1050), (t_3, 450), (t_5, 800), (t_4, 1000))$ \\
+				\SI{9.5}{\s} & 300 & $((t_3, 450), (t_5, 800), (t_4, 1000))$ \\
+				\SI{10.5}{\s} & 200 & $((t_5, 800), (t_4, 1000))$ \\
+				\SI{14.5}{\s} & 200 & $((t_4, 1000))$ \\
+				\SI{19.5}{\s} & - & $()$ \\
+				\bottomrule
+		\end{tabular}
+		\caption{Execution plan}
+		\label{tbl:execution_plan}
+\end{table}
+
+\begin{table}
+		\centering
+		\begin{tabular}{ll}
+				\toprule
+				Processor speed [MIPS] & Voltage [V] \\
+				\midrule
+				200 & 1.5 \\
+				300 & 2 \\
+				450 & 3.5 \\
+				\bottomrule
+		\end{tabular}
+		\caption{Processor speeds}
+		\label{tbl:processor_speeds}
+\end{table}
+
+\begin{table}
+		\centering
+		\begin{tabular}{lllll}
+				\toprule
+				Task & Arrival time [s] & Deadline (rel) [s] & Deadline (abs) [s] & Length [MI] \\
+				\midrule
+				$t_1$ & 0 & 4 & 4 & 900 \\
+				$t_2$ & 2 & 8 & 10 & 1800 \\
+				$t_3$ & 2.5 & 8 & 10.5 & 450 \\
+				$t_4$ & 5 & 20 & 25 & 1000 \\
+				$t_5$ & 6 & 14 & 20 & 800 \\
+				\bottomrule
+		\end{tabular}
+		\caption{Task arrival}
+		\label{tbl:tasks}
+\end{table}
+
+\end{document}
