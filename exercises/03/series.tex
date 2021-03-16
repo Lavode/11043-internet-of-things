@@ -136,14 +136,14 @@
 \section{LEDF scheduling}
 
 Assume that the scheduling algorithm runs whenever a new task is scheduled, or
-a scheduled task finished. Assume that the deadlines are relative to the
-thread's arrival times.
+a scheduled task finished. Assume that the deadlines are absolute.
 
 Given the processor speeds in table \ref{tbl:processor_speeds}, tasks in table
 \ref{tbl:tasks} and algorithm from slide 39 of the lecture, the execution plan
 in table \ref{tbl:execution_plan} results. Entries of the task queue are tuples
 $(t_i, l_i)$, with $l_i$ the \textbf{remaining} instruction length of thread
 $t_i$ at the given time. The task queue is ordered by ascending deadline.
+Numbers are rounded to two significant digits.
 
 \begin{table}
 		\centering
@@ -153,14 +153,14 @@ $t_i$ at the given time. The task queue is ordered by ascending deadline.
 				\midrule
 				\SI{0}{\s} & 300 & $((t_1, 900))$ \\
 				\SI{2}{\s} & 200 & $((t_1, 300), (t_2, 1800))$ \\
-				\SI{2.5}{\s} & 200 & $((t_1, 200), (t_2, 1800), (t_3, 450))$ \\
-				\SI{3.5}{\s} & 300 & $((t_2, 1800), (t_3, 450))$ \\
-				\SI{5}{\s} & 300 & $((t_2, 1350), (t_3, 450), (t_4, 1000))$ \\
-				\SI{6}{\s} & 300 & $((t_2, 1050), (t_3, 450), (t_5, 800), (t_4, 1000))$ \\
-				\SI{9.5}{\s} & 300 & $((t_3, 450), (t_5, 800), (t_4, 1000))$ \\
-				\SI{10.5}{\s} & 200 & $((t_5, 800), (t_4, 1000))$ \\
-				\SI{14.5}{\s} & 200 & $((t_4, 1000))$ \\
-				\SI{19.5}{\s} & - & $()$ \\
+				\SI{2.5}{\s} & 450 & $((t_1, 200), (t_2, 1800), (t_3, 450))$ \\
+				\SI{2.94}{\s} & 450 & $((t_2, 1800), (t_3, 450))$ \\
+				\SI{5}{\s} & 450 & $((t_2, 873), (t_3, 450), (t_4, 1000))$ \\
+				\SI{6}{\s} & 450 & $((t_2, 423), (t_3, 450), (t_5, 800), (t_4, 1000))$ \\
+				\SI{6.94}{\s} & 450 & $((t_3, 450), (t_5, 800), (t_4, 1000))$ \\
+				\SI{7.94}{\s} & 200 & $((t_5, 800), (t_4, 1000))$ \\
+				\SI{11.94}{\s} & 200 & $((t_4, 1000))$ \\
+				\SI{16.94}{\s} & - & $()$ \\
 				\bottomrule
 		\end{tabular}
 		\caption{Execution plan}
@@ -184,15 +184,15 @@ $t_i$ at the given time. The task queue is ordered by ascending deadline.
 
 \begin{table}
 		\centering
-		\begin{tabular}{lllll}
+		\begin{tabular}{llll}
 				\toprule
-				Task & Arrival time [s] & Deadline (rel) [s] & Deadline (abs) [s] & Length [MI] \\
+				Task & Arrival time [s] & Deadline [s] & Length [MI] \\
 				\midrule
-				$t_1$ & 0 & 4 & 4 & 900 \\
-				$t_2$ & 2 & 8 & 10 & 1800 \\
-				$t_3$ & 2.5 & 8 & 10.5 & 450 \\
-				$t_4$ & 5 & 20 & 25 & 1000 \\
-				$t_5$ & 6 & 14 & 20 & 800 \\
+				$t_1$ & 0 & 4 & 900 \\
+				$t_2$ & 2 & 8 & 1800 \\
+				$t_3$ & 2.5 & 8 & 450 \\
+				$t_4$ & 5 & 20 & 1000 \\
+				$t_5$ & 6 & 14 & 800 \\
 				\bottomrule
 		\end{tabular}
 		\caption{Task arrival}
