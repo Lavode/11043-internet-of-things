@@ -150,13 +150,14 @@ per unit of time of the reference'. Assuming $A$ to be the reference, $B$ has
 drifted \SI{5}{\s} over a total of \SI{100}{\s} of $A$, leading to a drift of:
 
 \[
-		d_B = \frac{\SI{105}{\s}}{\SI{100}{\s}} = \SI{1.05}{\s \per \s}
+		d_B = \frac{\SI{5}{\s}}{\SI{100}{\s}} = \SI{5e-2}{\s \per \s}
 \]
 
 \subsection{Linear relation between two clocks}
 
 As the two nodes were started simultaneously, their initial offsets are $0$.
-This simplifies the linear relation between the two to:
+With $d_i = \rho_i + 1$, where $\rho_i$ is the drift of node $i$, this
+simplifies the linear relation between the two to:
 
 \begin{align*}
 		C_A(t) & = d_{A, B} \cdot C_B(t) = \frac{d_A}{d_B} \cdot C_B(t) \approx \SI{0.952}{\s \per \s} \cdot C_B(t) \\
