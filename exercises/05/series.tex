@@ -1,0 +1,174 @@
+\documentclass[a4paper]{scrreprt}
+
+% Uncomment to optimize for double-sided printing.
+% \KOMAoptions{twoside}
+
+% Set binding correction manually, if known.
+% \KOMAoptions{BCOR=2cm}
+
+% Localization options
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% Quotations
+\usepackage{dirtytalk}
+
+% Floats
+\usepackage{float}
+
+% Enhanced verbatim sections. We're mainly interested in
+% \verbatiminput though.
+\usepackage{verbatim}
+
+% Automatically remove leading whitespace in lstlisting
+\usepackage{lstautogobble}
+
+% PDF-compatible landscape mode.
+% Makes PDF viewers show the page rotated by 90°.
+\usepackage{pdflscape}
+
+% Advanced tables
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+
+% Fancy tablerules
+\usepackage{booktabs}
+
+% Graphics
+\usepackage{graphicx}
+
+% Current time
+\usepackage[useregional=numeric]{datetime2}
+
+% Float barriers.
+% Automatically add a FloatBarrier to each \section
+\usepackage[section]{placeins}
+
+% Custom header and footer
+\usepackage{fancyhdr}
+
+\usepackage{geometry}
+\usepackage{layout}
+
+% Math tools
+\usepackage{mathtools}
+% Math symbols
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{amsthm}
+% General symbols
+\usepackage{stmaryrd}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+
+% Indistinguishable operator (three stacked tildes)
+\newcommand*{\diffeo}{% 
+  \mathrel{\vcenter{\offinterlineskip
+  \hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}}}}
+
+% Bullet point
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+
+\floatstyle{ruled}
+\newfloat{algo}{htbp}{algo}
+\floatname{algo}{Algorithm}
+% For use in algorithms
+\newcommand{\str}[1]{\textsc{#1}}
+\newcommand{\var}[1]{\textit{#1}}
+\newcommand{\op}[1]{\textsl{#1}}
+
+\pagestyle{plain}
+% \fancyhf{}
+% \lhead{}
+% \lfoot{}
+% \rfoot{}
+% 
+% Source code & highlighting
+\usepackage{listings}
+
+% SI units
+\usepackage[binary-units=true]{siunitx}
+\DeclareSIUnit\cycles{cycles}
+
+% Convenience commands
+\newcommand{\mailsubject}{11043 - Internet of Things - Series 5}
+\newcommand{\maillink}[1]{\href{mailto:#1?subject=\mailsubject}
+                               {#1}}
+
+% Should use this command wherever the print date is mentioned.
+\newcommand{\printdate}{\today}
+
+\subject{11043 - Internet of Things}
+\title{Series 5}
+
+\author{Michael Senn \maillink{michael.senn@students.unibe.ch} - 16-126-880}
+
+\date{\printdate}
+
+% Needs to be the last command in the preamble, for one reason or
+% another. 
+\usepackage{hyperref}
+
+\begin{document}
+\maketitle
+
+
+\setcounter{chapter}{4}
+
+\chapter{Series 5}
+
+\section{Requirements for time synchronization}
+
+Due to the limitations of sensor nodes, specific requirements exist when it
+comes to time synchronization.
+
+\begin{description}
+		\item[Energy efficiency] As nodes might not have access to the power
+				grid, energy usage must be low to be feasible to allow eg
+				operation with batteries.
+		\item[Cost \& size] As nodes might be deployed en masse, involved
+				components must be cheap enough to keep the price of each
+				individual node low. Similarly nodes might operate in
+				space-constrained environments, so e.g. big antennas might not
+				be feasible.
+		\item[Robustness] Sensor nodes may be added and removed randomly, and
+				existing ones might die. As such, time synchronization schemes
+				must be able to handle such a dynamic environment without
+				breaking down.
+\end{description}
+
+\section{Time drift \& skew example}
+
+Let $A, B$ be two nodes which booted at the same time. At a later time $t$, A's
+time is $C_A(t) = \SI{100}{\s}$, B's time is $C_B(t) = \SI{105}{\s}$.
+
+\subsection{Clock drift of B from A}
+
+The clock drift is defined as the `difference between a clock and a reference
+per unit of time of the reference'. Assuming $A$ to be the reference, $B$ has
+drifted \SI{5}{\s} over a total of \SI{100}{\s} of $A$, leading to a drift of:
+
+\[
+		d_B = \frac{\SI{105}{\s}}{\SI{100}{\s}} = \SI{1.05}{\s \per \s}
+\]
+
+\subsection{Linear relation between two clocks}
+
+As the two nodes were started simultaneously, their initial offsets are $0$.
+This simplifies the linear relation between the two to:
+
+\begin{align*}
+		C_A(t) & = d_{A, B} \cdot C_B(t) = \frac{d_A}{d_B} \cdot C_B(t) \approx \SI{0.952}{\s \per \s} \cdot C_B(t) \\
+		C_B(t) & = d_{B, A} \cdot C_A(t) = \frac{d_B}{d_A} \cdot C_A(t) = \SI{1.05}{\s \per \s} \cdot C_A(t) \\
+\end{align*}
+
+\subsection{Clock skew of B to A}
+
+The clock skew is the difference of two clocks. As such it is given as:
+
+\[
+		s_B = C_B(t) - C_A(t) = \SI{105}{\s} - \SI{100}{\s} = \SI{5}{\s}
+\]
+
+\end{document}
