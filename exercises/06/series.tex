@@ -1,0 +1,160 @@
+\documentclass[a4paper]{scrreprt}
+
+% Uncomment to optimize for double-sided printing.
+% \KOMAoptions{twoside}
+
+% Set binding correction manually, if known.
+% \KOMAoptions{BCOR=2cm}
+
+% Localization options
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% Quotations
+\usepackage{dirtytalk}
+
+\usepackage{numbertabbing}
+
+% Floats
+\usepackage{float}
+
+% Enhanced verbatim sections. We're mainly interested in
+% \verbatiminput though.
+\usepackage{verbatim}
+
+% Automatically remove leading whitespace in lstlisting
+\usepackage{lstautogobble}
+
+% PDF-compatible landscape mode.
+% Makes PDF viewers show the page rotated by 90°.
+\usepackage{pdflscape}
+
+% Advanced tables
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+
+% Fancy tablerules
+\usepackage{booktabs}
+
+% Graphics
+\usepackage{graphicx}
+
+% Current time
+\usepackage[useregional=numeric]{datetime2}
+
+% Float barriers.
+% Automatically add a FloatBarrier to each \section
+\usepackage[section]{placeins}
+
+% Custom header and footer
+\usepackage{fancyhdr}
+
+\usepackage{geometry}
+\usepackage{layout}
+
+% Math tools
+\usepackage{mathtools}
+% Math symbols
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{amsthm}
+% General symbols
+\usepackage{stmaryrd}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+
+% Indistinguishable operator (three stacked tildes)
+\newcommand*{\diffeo}{% 
+  \mathrel{\vcenter{\offinterlineskip
+  \hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}}}}
+
+% Bullet point
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+
+\floatstyle{ruled}
+\newfloat{algo}{htbp}{algo}
+\floatname{algo}{Algorithm}
+% For use in algorithms
+\newcommand{\str}[1]{\textsc{#1}}
+\newcommand{\var}[1]{\textit{#1}}
+\newcommand{\op}[1]{\textsl{#1}}
+
+\pagestyle{plain}
+% \fancyhf{}
+% \lhead{}
+% \lfoot{}
+% \rfoot{}
+% 
+% Source code & highlighting
+\usepackage{listings}
+
+% SI units
+\usepackage[binary-units=true]{siunitx}
+\DeclareSIUnit\cycles{cycles}
+
+% Convenience commands
+\newcommand{\mailsubject}{11043 - Internet of Things - Series 6}
+\newcommand{\maillink}[1]{\href{mailto:#1?subject=\mailsubject}
+                               {#1}}
+
+% Should use this command wherever the print date is mentioned.
+\newcommand{\printdate}{\today}
+
+\subject{11043 - Internet of Things}
+\title{Series 6}
+
+\author{Michael Senn \maillink{michael.senn@students.unibe.ch} - 16-126-880}
+
+\date{\printdate}
+
+% Needs to be the last command in the preamble, for one reason or
+% another. 
+\usepackage{hyperref}
+
+\begin{document}
+\maketitle
+
+
+\setcounter{chapter}{5}
+
+\chapter{Series 6}
+
+\section{Minimum connecting dominating set using MPR}
+
+Consider the set of nodes from the exercise. Let the following steps be an
+execution of the MPR protocol as shown in the lecture.
+
+\begin{itemize}
+		\item $MPR = \{\}, x = d, L_1 = \{b, c, e, i, g, f\}, L_2 = \{a, h, k, j\}$
+		\item $g \in L_1$ is only node connecting to $k \in L_2$
+		\item $MPR = MPR \cup \{g\} = \{g\}$
+		\item $L_2 = L_2 \setimnus \{h, k, j\} = \{a\}$
+		\item No $y \in L_1$ is the single item connecting to any $z \in L_2$
+		\item $\delta(f) = \delta(g) = \delta(i) = \delta(e) = 0$
+	  	\item $\delta(c) = \delta(b) = 1$
+		\item Assuming remaining energy of $b$ greater than remaining energy of $c$
+				\begin{itemize}
+						\item $MPR = MPR \cup \{b\} = \{g, b\}$
+						\item $L_2 = L_2 \setminus \{a\} = \{\}$
+				\end{itemize}
+		\item Else
+				\begin{itemize}
+						\item $MPR = MPR \cup \{c\} = \{g, c\}$
+						\item $L_2 = L_2 \setminus \{a\} = \{\}$
+				\end{itemize}
+\end{itemize}
+
+Hence there are two possible solutions for the $MPR$ set. If the remaining
+energy of $b$ is higher than of $c$, then $MPR = \{g, b\}$, otherwise $MPR =
+\{g, c\}$.
+
+\section{Need for coverage control in WSNs}
+
+Often sensors will be densely packed, with their sensing ranges overlapping
+significantly. In these cases activating too many sensors will increase the
+overall energy usage and network traffic, without significantly increasing the
+resolution of the sensor network. Coverage control attempts to optimize which
+sensors are on and which aren't to remedy this.
+
+\end{document}
