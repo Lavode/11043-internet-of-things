@@ -1,0 +1,175 @@
+\documentclass[a4paper]{scrreprt}
+
+% Uncomment to optimize for double-sided printing.
+% \KOMAoptions{twoside}
+
+% Set binding correction manually, if known.
+% \KOMAoptions{BCOR=2cm}
+
+% Localization options
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% Quotations
+\usepackage{dirtytalk}
+
+% Floats
+\usepackage{float}
+
+% Enhanced verbatim sections. We're mainly interested in
+% \verbatiminput though.
+\usepackage{verbatim}
+
+% Automatically remove leading whitespace in lstlisting
+\usepackage{lstautogobble}
+
+% PDF-compatible landscape mode.
+% Makes PDF viewers show the page rotated by 90°.
+\usepackage{pdflscape}
+
+% Advanced tables
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+
+% Fancy tablerules
+\usepackage{booktabs}
+
+% Graphics
+\usepackage{graphicx}
+
+% Current time
+\usepackage[useregional=numeric]{datetime2}
+
+% Float barriers.
+% Automatically add a FloatBarrier to each \section
+\usepackage[section]{placeins}
+
+% Custom header and footer
+\usepackage{fancyhdr}
+
+\usepackage{geometry}
+\usepackage{layout}
+
+% Math tools
+\usepackage{mathtools}
+% Math symbols
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{amsthm}
+% General symbols
+\usepackage{stmaryrd}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+
+% Indistinguishable operator (three stacked tildes)
+\newcommand*{\diffeo}{% 
+  \mathrel{\vcenter{\offinterlineskip
+  \hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}}}}
+
+% Bullet point
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+
+\pagestyle{plain}
+% \fancyhf{}
+% \lhead{}
+% \lfoot{}
+% \rfoot{}
+% 
+% Source code & highlighting
+\usepackage{listings}
+
+% SI units
+\usepackage[binary-units=true]{siunitx}
+\DeclareSIUnit\cycles{cycles}
+
+% Convenience commands
+\newcommand{\mailsubject}{11043 - Internet of Things - Series 7}
+\newcommand{\maillink}[1]{\href{mailto:#1?subject=\mailsubject}
+                               {#1}}
+
+% Should use this command wherever the print date is mentioned.
+\newcommand{\printdate}{\today}
+
+\subject{11043 - Internet of Things}
+\title{Series 7}
+
+\author{Michael Senn \maillink{michael.senn@students.unibe.ch} - 16-126-880}
+
+\date{\printdate}
+
+% Needs to be the last command in the preamble, for one reason or
+% another. 
+\usepackage{hyperref}
+
+\begin{document}
+\maketitle
+
+
+\setcounter{chapter}{6}
+
+\chapter{Series 7}
+
+\section{Sources of energy waste in MAC protocols}
+
+Potential sources of energy waste in MAC protocols are:
+
+\begin{description}
+		\item[Collisions and retransmissions] As a physical channel can
+				typically only accomodate a finite (often only one)
+				simultaneous transmission, collisions cause all senders to have
+				to retransmit at a later time. This introduces latency and
+				wastes energy.
+		\item[Idle listening] Typically receiving and sending data is
+				comparably energy-intensive, and significantly more expensive
+				than being in an idle state. As such listening for a
+				transmission when there is none can waste a lot of energy.
+		\item[Overhearing] When listening to a transmission not destined for
+				the current node, energy is wasted receiving and processing the
+				data. Ideally nodes will not be listening at all when a
+				transmission doesn't concern them, and at the very least they
+				must be able to exit processing as early as possible.
+\end{description}
+
+\section{MaxMAC vs WiseMAC}
+
+\subsection{WiseMAC}
+
+With WiseMAC, all nodes sample the medium with the same frequency but are
+initially not synchronized. They learn about others' sampling schedule by means
+of their acknowledgment packets. Now posessing the knowledge of when the
+recipient will listen, the sender knows when to send the preamble followed by
+the data such that the preamble can be as short as possible.
+
+Having received the data teh receiving node then acknowledges having received
+data, upon which the sending node can terminate the sending routine.
+
+\subsection{MaxMAC}
+
+MaxMAC builds on WiseMAC, but uses dynamic sampling frequencies. When traffic
+on the medium over a sliding window is high, wakeup frequencies are increased.
+Similarly when traffic is low, sampling frequencies are lowered.
+
+\section{Adaptability of LEACH vs X-MAC to changes of topology}
+
+\subsection{LEACH}
+
+LEACH is a scheduled protocol where nodes organize themselves in clusters, with
+alternating nodes taking on the role of cluster head. Regular nodes get
+assigned slots by the cluster head, during which they wake up and will send and
+receive data. Any transmission goes to the cluster head which will aggregate
+data and forward it to other cluster heads or the sink.
+
+As such changes in topology can cause clusters having to reform, or a
+connection to the sink to be interrupted if e.g. a cluster head dies.
+
+\subsection{X-MAC}
+
+X-MAC is a contention-based protocol, where a transmission is initiated by a
+preamble containing the destination's address. If the receiving node
+acknowledges this preamble, the sending node will transmit data. As such X-MAC
+is completely topology-unaware, with the sender communicating directly with the
+receiver. Any change in topology will only affect connections where one of the
+two nodes was changed.
+
+\end{document}
