@@ -151,15 +151,27 @@ happened \textbf{g}reedily (getting closer to the destination) or via
 \textbf{p}ermieter routing (moving away from the destination node due to an
 obstacle).
 
-Note how the distance between K and D is marginally (approximately 2 pixels)
-shorter than the one between K and L, which causes a first hop from K to J
-(greedy), then a second one back from J to K (perimeter).
+Assume that the distance KD is shorter than JD. In the exercise they are equal
+to within a few pixels.
 
 \[
 		S \xrightarrow{g} B \xrightarrow{g} D \xrightarrow{g} F \xrightarrow{g}
-		G \xrightarrow{p} E \xrightarrow{g} I \xrightarrow{g} K \xrightarrow{g}
-		J \xrightarrow{p} K \xrightarrow{p} L \xrightarrow{g} M \xrightarrow{g}
+		G \xrightarrow{p} E \xrightarrow{g} I \xrightarrow{g} K \xrightarrow{p}
+		J \xrightarrow{g} K \xrightarrow{p} L \xrightarrow{g} M \xrightarrow{g}
 		N \xrightarrow{g} D
 \]
+
+The path is also crudely visualized in figure \ref{fig:gpsr_routing}. Blue paths are
+greedy, red are perimeter (with the counter-clockwise search direction). The
+green line is the source-destination intersect which perimeter hops may not
+cross.
+
+\begin{figure}[h]
+        \centering
+        \includegraphics[width=\textwidth]{network}
+        \caption{GPSR routing}
+        \label{fig:gpsr_routing}
+\end{figure}
+
 
 \end{document}
