@@ -151,20 +151,20 @@ happened \textbf{g}reedily (getting closer to the destination) or via
 \textbf{p}ermieter routing (moving away from the destination node due to an
 obstacle).
 
-Assume that the distance KD is shorter than JD. In the exercise they are equal
+Assume that the distance JD is shorter than KD. In the exercise they are equal
 to within a few pixels.
 
 \[
 		S \xrightarrow{g} B \xrightarrow{g} D \xrightarrow{g} F \xrightarrow{g}
-		G \xrightarrow{p} E \xrightarrow{g} I \xrightarrow{g} K \xrightarrow{p}
-		J \xrightarrow{g} K \xrightarrow{p} L \xrightarrow{g} M \xrightarrow{g}
+		G \xrightarrow{p} E \xrightarrow{p} I \xrightarrow{p} K \xrightarrow{g}
+		J \xrightarrow{p} K \xrightarrow{p} L \xrightarrow{p} M \xrightarrow{p}
 		N \xrightarrow{g} D
 \]
 
-The path is also crudely visualized in figure \ref{fig:gpsr_routing}. Blue paths are
-greedy, red are perimeter (with the counter-clockwise search direction). The
-green line is the source-destination intersect which perimeter hops may not
-cross.
+The path is also crudely visualized in figure \ref{fig:gpsr_routing}. Blue hops
+are greedy, red are perimeter (with the counter-clockwise search direction
+indicated).  The green line is the source-destination intersect which perimeter
+hops may not cross.
 
 \begin{figure}[h]
         \centering
