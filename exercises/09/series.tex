@@ -1,0 +1,154 @@
+\documentclass[a4paper]{scrreprt}
+
+% Uncomment to optimize for double-sided printing.
+% \KOMAoptions{twoside}
+
+% Set binding correction manually, if known.
+% \KOMAoptions{BCOR=2cm}
+
+% Localization options
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% Quotations
+\usepackage{dirtytalk}
+
+% Floats
+\usepackage{float}
+
+% Enhanced verbatim sections. We're mainly interested in
+% \verbatiminput though.
+\usepackage{verbatim}
+
+% Automatically remove leading whitespace in lstlisting
+\usepackage{lstautogobble}
+
+% PDF-compatible landscape mode.
+% Makes PDF viewers show the page rotated by 90°.
+\usepackage{pdflscape}
+
+% Advanced tables
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+
+% Fancy tablerules
+\usepackage{booktabs}
+
+% Graphics
+\usepackage{graphicx}
+
+% Current time
+\usepackage[useregional=numeric]{datetime2}
+
+% Float barriers.
+% Automatically add a FloatBarrier to each \section
+\usepackage[section]{placeins}
+
+% Custom header and footer
+\usepackage{fancyhdr}
+
+\usepackage{geometry}
+\usepackage{layout}
+
+% Math tools
+\usepackage{mathtools}
+% Math symbols
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{amsthm}
+% General symbols
+\usepackage{stmaryrd}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+
+% Indistinguishable operator (three stacked tildes)
+\newcommand*{\diffeo}{% 
+  \mathrel{\vcenter{\offinterlineskip
+  \hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}}}}
+
+% Bullet point
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+
+\pagestyle{plain}
+% \fancyhf{}
+% \lhead{}
+% \lfoot{}
+% \rfoot{}
+% 
+% Source code & highlighting
+\usepackage{listings}
+
+% SI units
+\usepackage[binary-units=true]{siunitx}
+\DeclareSIUnit\cycles{cycles}
+
+% Convenience commands
+\newcommand{\mailsubject}{11043 - Internet of Things - Series 9}
+\newcommand{\maillink}[1]{\href{mailto:#1?subject=\mailsubject}
+                               {#1}}
+
+% Should use this command wherever the print date is mentioned.
+\newcommand{\printdate}{\today}
+
+\subject{11043 - Internet of Things}
+\title{Series 9}
+
+\author{Michael Senn \maillink{michael.senn@students.unibe.ch} - 16-126-880}
+
+\date{\printdate}
+
+% Needs to be the last command in the preamble, for one reason or
+% another. 
+\usepackage{hyperref}
+
+\begin{document}
+\maketitle
+
+
+\setcounter{chapter}{8}
+
+\chapter{Series 9}
+
+\section{Hop-by-hop vs end-to-end with RMST}
+
+As each hop has a certain error transmission percentage, the overall
+(end-to-end) error transmission percentage increases significantly as the
+number of hops increases. This applies not only to the initial packet, but also
+to any subsequen transmission. As an example consider and end-to-end arrival
+probability of \SI{40}{\percent}. Not only is the initial packet likely to not
+arrive, but any kind of end-to-end retransmission is also likely to not arrive.
+This greatly increase the total amount of packets which need to be sent.
+
+With a hop-by-hop approach, the amount of total transmissions is significantly
+lower as a retransmission can happen immediately between the two hops where
+transmission failed. This way, a failed transmission somewhere along the route
+does not require a full retransmission between source and sink.
+
+\section{TCP in IoT}
+
+TCP was designed for connections with a low error rate, which does not
+generally hold for IoT networks. In IoT networks, the combination of wireless
+communication (susceptible to environmental conditions and medium overload),
+along with an unstable topology and unreliable nodes, error rates are often
+high.
+
+Specifically this leads to a few issues, such as:
+\begin{itemize}
+		\item TCP does not distinguish losses due to congestion from losses due
+				to transmission errors. In IoT networks it is desirable to be
+				able to handle each case separately, via specialized protocols
+				and mechanisms, as their root cause is different.
+		\item TCP performs congestion control and error recovery only in the
+				endpoints of a connection, which --- in networks with high
+				error rates --- causes a large number of transmissions to
+				occurr. In IoT networks it is desireable to be able to --- at
+				least selectively --- have a hop-by-hop handling of such
+				issues.
+		\item TCP by construction always offers reliable transport, which
+				causes a certain overhead. In IoT networks there are cases
+				where unreliable transport mechanisms are acceptable, in order
+				to lower resource usage.
+\end{itemize}
+
+\end{document}
