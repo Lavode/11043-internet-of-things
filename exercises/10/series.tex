@@ -1,0 +1,148 @@
+\documentclass[a4paper]{scrreprt}
+
+% Uncomment to optimize for double-sided printing.
+% \KOMAoptions{twoside}
+
+% Set binding correction manually, if known.
+% \KOMAoptions{BCOR=2cm}
+
+% Localization options
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% Quotations
+\usepackage{dirtytalk}
+
+% Floats
+\usepackage{float}
+
+% Enhanced verbatim sections. We're mainly interested in
+% \verbatiminput though.
+\usepackage{verbatim}
+
+% Automatically remove leading whitespace in lstlisting
+\usepackage{lstautogobble}
+
+% PDF-compatible landscape mode.
+% Makes PDF viewers show the page rotated by 90°.
+\usepackage{pdflscape}
+
+% Advanced tables
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+
+% Fancy tablerules
+\usepackage{booktabs}
+
+% Graphics
+\usepackage{graphicx}
+
+% Current time
+\usepackage[useregional=numeric]{datetime2}
+
+% Float barriers.
+% Automatically add a FloatBarrier to each \section
+\usepackage[section]{placeins}
+
+% Custom header and footer
+\usepackage{fancyhdr}
+
+\usepackage{geometry}
+\usepackage{layout}
+
+% Math tools
+\usepackage{mathtools}
+% Math symbols
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{amsthm}
+% General symbols
+\usepackage{stmaryrd}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+
+% Indistinguishable operator (three stacked tildes)
+\newcommand*{\diffeo}{% 
+  \mathrel{\vcenter{\offinterlineskip
+  \hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}}}}
+
+% Bullet point
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+
+\pagestyle{plain}
+% \fancyhf{}
+% \lhead{}
+% \lfoot{}
+% \rfoot{}
+% 
+% Source code & highlighting
+\usepackage{listings}
+
+% SI units
+\usepackage[binary-units=true]{siunitx}
+\DeclareSIUnit\cycles{cycles}
+
+% Convenience commands
+\newcommand{\mailsubject}{11043 - Internet of Things - Series 10}
+\newcommand{\maillink}[1]{\href{mailto:#1?subject=\mailsubject}
+                               {#1}}
+
+% Should use this command wherever the print date is mentioned.
+\newcommand{\printdate}{\today}
+
+\subject{11043 - Internet of Things}
+\title{Series 10}
+
+\author{Michael Senn \maillink{michael.senn@students.unibe.ch} - 16-126-880}
+
+\date{\printdate}
+
+% Needs to be the last command in the preamble, for one reason or
+% another. 
+\usepackage{hyperref}
+
+\begin{document}
+\maketitle
+
+
+\setcounter{chapter}{9}
+
+\chapter{Series 10}
+
+\section{COAP methods}
+
+The four methods supported by COAP are:
+\begin{description}
+		\item[GET] Analogous to HTTP GET. Retrieves information stored at a
+				given COAP URI.
+		\item[POST] Analogous to HTTP POST. Asks for requested COAP URI to
+				process data enclosed in request. Can lead to eg a new resource
+				being created, or an action being taken.
+		\item[PUT] Analogous to HTTP PUT. Asks for resource at requested URI
+				to be updated based on the enclosed payload. Usually used to
+				change the details of an existing resource.
+		\item[DELETE] Analogous to HTTP DELETE. Asks that the resource at the
+				requested URI be deleted.
+\end{description}
+
+\section{PubSub in MQTT}
+
+The publish-subscriber pattern as used by MQTT works by allowing clients who
+publish messages on a broker - `publishers' - to specify which channel to
+publish them to.  Clients who want to receive messages from a broker -
+`subscribers' - then specify from which channels they want to receive messages.
+
+This has the advantage of completely decoupling publishers and subscribers. A
+publisher must only know a suitable channel to publish their message to, and
+any subscriber interested in these messages can subscribe and unsubscribe from
+them at will.
+
+This also allows implementing fan-out or fan-in communications, where eg a
+server pushes commands to a channel listened to by all devices, respectively
+devices push updates to a channel listened to by one server.
+
+Authorization can be handled in a centralised way by the broker, based on
+whatever mechanism is deemed suitable.
+
+\end{document}
