@@ -1,0 +1,159 @@
+\documentclass[a4paper]{scrreprt}
+
+% Uncomment to optimize for double-sided printing.
+% \KOMAoptions{twoside}
+
+% Set binding correction manually, if known.
+% \KOMAoptions{BCOR=2cm}
+
+% Localization options
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% Quotations
+\usepackage{dirtytalk}
+
+% Floats
+\usepackage{float}
+
+% Enhanced verbatim sections. We're mainly interested in
+% \verbatiminput though.
+\usepackage{verbatim}
+
+% Automatically remove leading whitespace in lstlisting
+\usepackage{lstautogobble}
+
+% PDF-compatible landscape mode.
+% Makes PDF viewers show the page rotated by 90°.
+\usepackage{pdflscape}
+
+% Advanced tables
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+
+% Fancy tablerules
+\usepackage{booktabs}
+
+% Graphics
+\usepackage{graphicx}
+
+% Current time
+\usepackage[useregional=numeric]{datetime2}
+
+% Float barriers.
+% Automatically add a FloatBarrier to each \section
+\usepackage[section]{placeins}
+
+% Custom header and footer
+\usepackage{fancyhdr}
+
+\usepackage{geometry}
+\usepackage{layout}
+
+% Math tools
+\usepackage{mathtools}
+% Math symbols
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{amsthm}
+% General symbols
+\usepackage{stmaryrd}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+
+% Indistinguishable operator (three stacked tildes)
+\newcommand*{\diffeo}{% 
+  \mathrel{\vcenter{\offinterlineskip
+  \hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}\vskip-.35ex\hbox{$\sim$}}}}
+
+% Bullet point
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+
+\pagestyle{plain}
+% \fancyhf{}
+% \lhead{}
+% \lfoot{}
+% \rfoot{}
+% 
+% Source code & highlighting
+\usepackage{listings}
+
+% SI units
+\usepackage[binary-units=true]{siunitx}
+\DeclareSIUnit\cycles{cycles}
+
+% Convenience commands
+\newcommand{\mailsubject}{11043 - Internet of Things - Series 11}
+\newcommand{\maillink}[1]{\href{mailto:#1?subject=\mailsubject}
+                               {#1}}
+
+% Should use this command wherever the print date is mentioned.
+\newcommand{\printdate}{\today}
+
+\subject{11043 - Internet of Things}
+\title{Series 11}
+
+\author{Michael Senn \maillink{michael.senn@students.unibe.ch} - 16-126-880}
+
+\date{\printdate}
+
+% Needs to be the last command in the preamble, for one reason or
+% another. 
+\usepackage{hyperref}
+
+\begin{document}
+\maketitle
+
+
+\setcounter{chapter}{10}
+
+\chapter{Series 11}
+
+\section{Symmetric vs asymmetric cryptography in IoT networks}
+
+With asymmetric cryptography, each node posesses two keys. A public key, which
+is known to everyone, and a private key which is kept to itself. To ensure
+authenticity, all public keys have to either be known to every node in advance,
+or they have to e.g. be signed by a shared trusted entity.
+
+This approach has the benefit of being fully scalable. When a node node is
+deployed, it simply receives a new keypair, and will be able to communicate
+securely with other nodes in the network. Its downsides are, for one, the
+comparably large computational cost of asymmetric cryptography, which is
+especially relevant for computationally-weak environments as found in IoT. Its
+second downside is that, if a node was to be captured, an attacker could then
+impersonate this node. Protocols for key revocation exist, but do require nodes
+to e.g. periodically query a central entity for blacklisted keys.
+
+In the case of symmetric cryptography, each pair of nodes has a shared key
+which they use for communication between the two. This has the advantage of
+allowing the use of fast symmetric encryption protocols, which benefit IoT
+devices.
+
+Its main disadvantage is the inherent lack of scalability. If a node is added,
+all nodes must be able to agree on a shared key with the new node. This
+requires either updates to all existing nodes, or the use of a central
+authority which distributes these keys.
+
+A realistic approach might thus use symmetric keys for the bulk of the
+communication, with asymmetric cryptography used to agree on the keys to use
+for each pair.
+
+\section{Main layers of cyber-physical systems}
+
+The lowest layer of a CPS is the perception layer. It contains sensors and
+actuators, i.e. any components which actually interface with the physical world.
+An example of a component in this layer would be a temperature sensors, or a
+valve actuator.
+
+The middle layer is the transmission layer, which is concerned with allowing
+components of the perception layer to communicate with each other, as well as
+with any application. Examples of this layer are network hardware such as
+routers, or protocols such as WiFi.
+
+The upmost layer is the application layer. In it there are applications which
+collect data from sensors, perform calculations, and send commands to
+actuators.  An example would be a city's smart energy grid.
+
+\end{document}
