@@ -1,3 +1,6 @@
 slides/*.pdf
 exercises/**/*.log
 exercises/**/*.pdf
+summary/**/*.log
+summary/**/*.pdf
+exercises/points.ods
